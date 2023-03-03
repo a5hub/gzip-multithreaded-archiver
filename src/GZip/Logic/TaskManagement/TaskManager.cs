@@ -12,7 +12,7 @@ namespace GZip.Logic.TaskManagement
     public class TaskManager : ITaskManager
     {
         /// <summary> Thread shared event </summary>
-        public ManualResetEventSlim ResetEvent { get; } = new ManualResetEventSlim(false);
+        public ManualResetEventSlim ResetEvent { get; } = new(false);
 
         /// <summary> Showed last processed task </summary>
         public int TaskSequenceNumber { get; private set; }

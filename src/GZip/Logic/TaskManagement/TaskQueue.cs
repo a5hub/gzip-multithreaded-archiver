@@ -6,7 +6,7 @@ namespace GZip.Logic.TaskManagement
     public class TaskQueue : ITaskQueue<GZipTask>
     {
         /// <summary> Working queue for tasks to be processed </summary>
-        public ConcurrentQueue<GZipTask> Queue { get; } = new ConcurrentQueue<GZipTask>();
+        public ConcurrentQueue<GZipTask> Queue { get; } = new();
         
         /// <summary> Returns true if queue no empty yet </summary>
         public bool NotEmpty()
