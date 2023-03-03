@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GZip", "GZip\GZip.csproj", "{2C577EA0-D3A8-4C5C-BA7B-69C8EF7C4F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GZip", "src\GZip\GZip.csproj", "{2C577EA0-D3A8-4C5C-BA7B-69C8EF7C4F30}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GZip.Test", "GZip.Test\GZip.Test.csproj", "{6FE9DD59-D614-4194-853C-3932689368CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GZip.Tests", "tests\GZip.Tests\GZip.Tests.csproj", "{6FE9DD59-D614-4194-853C-3932689368CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
