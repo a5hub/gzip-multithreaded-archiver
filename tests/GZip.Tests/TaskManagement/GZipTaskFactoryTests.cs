@@ -1,36 +1,35 @@
 ﻿using FluentAssertions;
-using GZip.Logic.Operations;
-using GZip.Logic.TaskManagement;
-using GZip.Models;
+using GZip.Logic.Logic.Operations;
+using GZip.Logic.Logic.TaskManagement;
+using GZip.Logic.Models;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.TaskManagement
+namespace GZip.Tests.TaskManagement;
+
+public class GZipTaskFactoryTests
 {
-    public class GZipTaskFactoryTests
+    private GZipTaskFactory target;
+
+    public GZipTaskFactoryTests()
     {
-        private GZipTaskFactory target;
+        target = new GZipTaskFactory();
+    }
 
-        public GZipTaskFactoryTests()
-        {
-            target = new GZipTaskFactory();
-        }
+    [Fact]
+    public void CreateTest_WorksFine()
+    {
+        // arrange
+        var pathParams = new FilePaths();
+        var syncParams = new TaskSynchronizationParams();
+        var chunk = new FileChunk();
+        var operation = new Mock<IOperation>();
+        var expected = new GZipTask(pathParams, syncParams, chunk, operation.Object);
 
-        [Fact]
-        public void CreateTest_WorksFine()
-        {
-            // arrange
-            var pathParams = new FilePaths();
-            var syncParams = new TaskSynchronizationParams();
-            var chunk = new FileChunk();
-            var operation = new Mock<IOperation>();
-            var expected = new GZipTask(pathParams, syncParams, chunk, operation.Object);
+        // act
+        var actual = target.Create(pathParams, syncParams, chunk, operation.Object);
 
-            // act
-            var actual = target.Create(pathParams, syncParams, chunk, operation.Object);
-
-            // assert
-            actual.Should().BeEquivalentTo(expected);
-        }
+        // assert
+        actual.Should().BeEquivalentTo(expected);
     }
 }

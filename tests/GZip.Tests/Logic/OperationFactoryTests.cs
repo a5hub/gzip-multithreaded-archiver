@@ -1,70 +1,70 @@
 ﻿using System;
 using System.IO.Abstractions.TestingHelpers;
-using GZip.Configuration;
-using GZip.Logic.Archivation;
-using GZip.Logic.Operations;
+using GZip.ConsoleApp;
+using GZip.Logic.Configuration;
+using GZip.Logic.Logic.Archivation;
+using GZip.Logic.Logic.Operations;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.Logic
+namespace GZip.Tests.Logic;
+
+public class OperationFactoryTests
 {
-    public class OperationFactoryTests
+    private readonly OperationFactory target;
+    private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
+    private readonly Mock<IArchiveProvider> archiveProvider = new Mock<IArchiveProvider>();
+    private readonly MockFileSystem mockFileSystem;
+
+    public OperationFactoryTests()
     {
-        private readonly OperationFactory target;
-        private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
-        private readonly Mock<IArchiveProvider> archiveProvider = new Mock<IArchiveProvider>();
-        private readonly MockFileSystem mockFileSystem;
+        mockFileSystem = new MockFileSystem();
+        target = new OperationFactory(appConfig.Object, archiveProvider.Object, mockFileSystem);
+    }
 
-        public OperationFactoryTests()
+    [Fact]
+    public void CreateTest_WorksFine_CreatesCompressionOperation()
+    {
+        // arrange
+        var operationType = OperationType.Compress;
+
+        // act
+        var actual = target.Create(operationType);
+
+        // assert
+        Assert.True(actual is CompressionOperation);
+    }
+
+    [Fact]
+    public void CreateTest_WorksFine_CreatesDecompressionOperation()
+    {
+        // arrange
+        var operationType = OperationType.Decompress;
+
+        // act
+        var actual = target.Create(operationType);
+
+        // assert
+        Assert.True(actual is DecompressionOperation);
+    }
+
+    [Fact]
+    public void CreateTest_WorksFine_ThrowsUnexpectedOperationResult()
+    {
+        // arrange
+        var operationType = OperationType.Default;
+
+        // act
+        try
         {
-            mockFileSystem = new MockFileSystem();
-            target = new OperationFactory(appConfig.Object, archiveProvider.Object, mockFileSystem);
+            target.Create(operationType);
+            Assert.True(false, "Exception was not thrown!");
         }
-
-        [Fact]
-        public void CreateTest_WorksFine_CreatesCompressionOperation()
+        catch (Exception ex)
         {
-            // arrange
-            var operationType = OperationType.Compress;
-
-            // act
-            var actual = target.Create(operationType);
-
             // assert
-            Assert.True(actual is CompressionOperation);
-        }
-
-        [Fact]
-        public void CreateTest_WorksFine_CreatesDecompressionOperation()
-        {
-            // arrange
-            var operationType = OperationType.Decompress;
-
-            // act
-            var actual = target.Create(operationType);
-
-            // assert
-            Assert.True(actual is DecompressionOperation);
-        }
-
-        [Fact]
-        public void CreateTest_WorksFine_ThrowsUnexpectedOperationResult()
-        {
-            // arrange
-            var operationType = OperationType.Default;
-
-            // act
-            try
-            {
-                target.Create(operationType);
-                Assert.True(false, "Exception was not thrown!");
-            }
-            catch (Exception ex)
-            {
-                // assert
-                Assert.True(ex is ArgumentException);
-                Assert.Equal(Resources.UnexpectedOperationException, ex.Message);
-            }
+            Assert.True(ex is ArgumentException);
+            Assert.Equal("Unexpected operation to create", ex.Message);
         }
     }
 }

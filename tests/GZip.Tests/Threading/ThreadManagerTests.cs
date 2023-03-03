@@ -1,62 +1,61 @@
 ﻿using System;
 using FluentAssertions;
-using GZip.Configuration;
-using GZip.Logic.Threading;
+using GZip.Logic.Configuration;
+using GZip.Logic.Logic.Threading;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.Threading
+namespace GZip.Tests.Threading;
+
+public class ThreadManagerTests
 {
-    public class ThreadManagerTests
+    private readonly ThreadManager target;
+    private readonly Mock<IThreadProvider> threadProvider = new Mock<IThreadProvider>();
+    private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
+    private readonly Mock<IThreadExecutable> taskManager = new Mock<IThreadExecutable>();
+
+    public ThreadManagerTests()
     {
-        private readonly ThreadManager target;
-        private readonly Mock<IThreadProvider> threadProvider = new Mock<IThreadProvider>();
-        private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
-        private readonly Mock<IThreadExecutable> taskManager = new Mock<IThreadExecutable>();
+        target = new ThreadManager(threadProvider.Object, appConfig.Object);
+    }
 
-        public ThreadManagerTests()
-        {
-            target = new ThreadManager(threadProvider.Object, appConfig.Object);
-        }
+    [Fact]
+    public void ExecuteInParallelTest_WorksFine()
+    {
+        // arrange
+        Action<Exception> exceptionHandler = (ex) => { };
 
-        [Fact]
-        public void ExecuteInParallelTest_WorksFine()
-        {
-            // arrange
-            Action<Exception> exceptionHandler = (ex) => { };
+        // expectations
+        appConfig.SetupGet(_ => _.ProcessorsCount).Returns(2);
 
-            // expectations
-            appConfig.SetupGet(_ => _.ProcessorsCount).Returns(2);
+        threadProvider.Setup(_ => _.CreateThread(It.IsAny<Action>()))
+            .Callback<Action>(action => action());
 
-            threadProvider.Setup(_ => _.CreateThread(It.IsAny<Action>()))
-                .Callback<Action>(action => action());
+        taskManager.Setup(_ => _.Execute(It.IsAny<Action<Exception>>()))
+            .Callback<Action<Exception>>(action =>
+            {
+                action.Should().BeEquivalentTo(exceptionHandler);
+            });
 
-            taskManager.Setup(_ => _.Execute(It.IsAny<Action<Exception>>()))
-                .Callback<Action<Exception>>(action =>
-                {
-                    action.Should().BeEquivalentTo(exceptionHandler);
-                });
+        // act
+        target.ExecuteInParallel(taskManager.Object, exceptionHandler);
 
-            // act
-            target.ExecuteInParallel(taskManager.Object, exceptionHandler);
+        // assert
+        appConfig.VerifyAll();
+        threadProvider.VerifyAll();
+        taskManager.VerifyAll();
+    }
 
-            // assert
-            appConfig.VerifyAll();
-            threadProvider.VerifyAll();
-            taskManager.VerifyAll();
-        }
+    [Fact]
+    public void InterruptAllParallelExecutingThreadsTest_WorksFine()
+    {
+        // expectations
+        threadProvider.Setup(_ => _.AbortAllThreads());
 
-        [Fact]
-        public void InterruptAllParallelExecutingThreadsTest_WorksFine()
-        {
-            // expectations
-            threadProvider.Setup(_ => _.AbortAllThreads());
+        // act
+        target.InterruptAllParallelExecutingThreads();
 
-            // act
-            target.InterruptAllParallelExecutingThreads();
-
-            // assert
-            threadProvider.VerifyAll();
-        }
+        // assert
+        threadProvider.VerifyAll();
     }
 }

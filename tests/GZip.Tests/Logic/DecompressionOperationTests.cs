@@ -1,72 +1,71 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using GZip.Configuration;
-using GZip.Logic.Archivation;
-using GZip.Logic.Operations;
+using GZip.Logic.Configuration;
+using GZip.Logic.Logic.Archivation;
+using GZip.Logic.Logic.Operations;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.Logic
+namespace GZip.Tests.Logic;
+
+public class DecompressionOperationTests
 {
-    public class DecompressionOperationTests
+    private readonly DecompressionOperation target;
+    private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
+    private readonly Mock<IArchiveProvider> archiveProvider = new Mock<IArchiveProvider>();
+    private readonly MockFileSystem mockFileSystem;
+
+    public DecompressionOperationTests()
     {
-        private readonly DecompressionOperation target;
-        private readonly Mock<IAppConfig> appConfig = new Mock<IAppConfig>();
-        private readonly Mock<IArchiveProvider> archiveProvider = new Mock<IArchiveProvider>();
-        private readonly MockFileSystem mockFileSystem;
+        mockFileSystem = new MockFileSystem();
+        target = new DecompressionOperation(appConfig.Object, archiveProvider.Object, mockFileSystem);
+    }
 
-        public DecompressionOperationTests()
+    [Fact]
+    public void SplitFileTest_WorksFine()
+    {
+        // arrange
+        var filePath = @"C:\temp\in.txt";
+
+        byte[] fileBytesData =
         {
-            mockFileSystem = new MockFileSystem();
-            target = new DecompressionOperation(appConfig.Object, archiveProvider.Object, mockFileSystem);
-        }
+            0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
+            1, 2, 3, 4, 5,
+            0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
+            5, 4, 3, 2, 1
+        };
 
-        [Fact]
-        public void SplitFileTest_WorksFine()
-        {
-            // arrange
-            var filePath = @"C:\temp\in.txt";
+        var fileData = new MockFileData(fileBytesData);
 
-            byte[] fileBytesData =
-            {
-                0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
-                1, 2, 3, 4, 5,
-                0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
-                5, 4, 3, 2, 1
-            };
+        mockFileSystem.AddFile(filePath, fileData);
+        var chunkSize = 20;
 
-            var fileData = new MockFileData(fileBytesData);
+        // expectations
+        appConfig.SetupGet(_ => _.CompressionChunkSize).Returns(chunkSize);
 
-            mockFileSystem.AddFile(filePath, fileData);
-            var chunkSize = 20;
+        // act
+        var expected = target.SplitFile(filePath).ToList();
 
-            // expectations
-            appConfig.SetupGet(_ => _.CompressionChunkSize).Returns(chunkSize);
+        // assert
+        Assert.Equal(2, expected.Count);
+        appConfig.VerifyAll();
+    }
 
-            // act
-            var expected = target.SplitFile(filePath).ToList();
+    [Fact]
+    public void ProcessChunkTest_WorksFine()
+    {
+        // arrange
+        var input = new byte[] { 1, 2, 3, 4, 5 };
+        var expected = new byte[] { 5, 4, 3, 2, 1 };
 
-            // assert
-            Assert.Equal(2, expected.Count);
-            appConfig.VerifyAll();
-        }
+        // expectations
+        archiveProvider.Setup(_ => _.Decompress(input)).Returns(expected);
 
-        [Fact]
-        public void ProcessChunkTest_WorksFine()
-        {
-            // arrange
-            var input = new byte[] { 1, 2, 3, 4, 5 };
-            var expected = new byte[] { 5, 4, 3, 2, 1 };
+        // act
+        var actual = target.ProcessChunk(input);
 
-            // expectations
-            archiveProvider.Setup(_ => _.Decompress(input)).Returns(expected);
-
-            // act
-            var actual = target.ProcessChunk(input);
-
-            // assert
-            Assert.Equal(expected, actual);
-            archiveProvider.VerifyAll();
-        }
+        // assert
+        Assert.Equal(expected, actual);
+        archiveProvider.VerifyAll();
     }
 }

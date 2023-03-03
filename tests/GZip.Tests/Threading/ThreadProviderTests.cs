@@ -1,94 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using GZip.Logic.Threading;
+using GZip.Logic.Logic.Threading;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.Threading
+namespace GZip.Tests.Threading;
+
+public class ThreadProviderTests
 {
-    public class ThreadProviderTests
+    private readonly ThreadProvider target;
+
+    public ThreadProviderTests()
     {
-        private readonly ThreadProvider target;
+        target = new ThreadProvider();
+    }
 
-        public ThreadProviderTests()
-        {
-            target = new ThreadProvider();
-        }
+    [Fact]
+    public void CreateThreadTest_WorksFine()
+    {
+        // act
+        target.CreateThread(null);
 
-        [Fact]
-        public void CreateThreadTest_WorksFine()
-        {
-            // act
-            target.CreateThread(null);
+        // assert
+        Assert.True(target.Threads.Count == 1);
+    }
 
-            // assert
-            Assert.True(target.Threads.Count == 1);
-        }
+    [Fact]
+    public void WaitAllThreadsTest_WorksFine()
+    {
+        // arrange
+        Action method = () => { Thread.Sleep(100); };
+        var thread1 = new Thread(() => method());
+        var thread2 = new Thread(() => method());
+        var threads = new List<Thread> {thread1, thread2};
+        thread1.Start();
+        thread2.Start();
 
-        [Fact]
-        public void WaitAllThreadsTest_WorksFine()
-        {
-            // arrange
-            Action method = () => { Thread.Sleep(100); };
-            var thread1 = new Thread(() => method());
-            var thread2 = new Thread(() => method());
-            var threads = new List<Thread> {thread1, thread2};
-            thread1.Start();
-            thread2.Start();
+        // expectations
+        var mock = new Mock<ThreadProvider>();
+        mock.SetupGet(x => x.Threads).Returns(threads);
 
-            // expectations
-            var mock = new Mock<ThreadProvider>();
-            mock.SetupGet(x => x.Threads).Returns(threads);
+        // act
+        mock.Object.WaitAllThreads();
 
-            // act
-            mock.Object.WaitAllThreads();
+        // assert
+        Assert.Equal(threads, mock.Object.Threads);
+        mock.VerifyAll();
+    }
 
-            // assert
-            Assert.Equal(threads, mock.Object.Threads);
-            mock.VerifyAll();
-        }
+    [Fact]
+    public void StartAllThreadsTest_WorksFine()
+    {
+        // arrange
+        Action method = () => { Thread.Sleep(100); };
+        var thread1 = new Thread(() => method());
+        var thread2 = new Thread(() => method());
+        var threads = new List<Thread> {thread1, thread2};
 
-        [Fact]
-        public void StartAllThreadsTest_WorksFine()
-        {
-            // arrange
-            Action method = () => { Thread.Sleep(100); };
-            var thread1 = new Thread(() => method());
-            var thread2 = new Thread(() => method());
-            var threads = new List<Thread> {thread1, thread2};
+        // expectations
+        var mock = new Mock<ThreadProvider>();
+        mock.SetupGet(x => x.Threads).Returns(threads);
 
-            // expectations
-            var mock = new Mock<ThreadProvider>();
-            mock.SetupGet(x => x.Threads).Returns(threads);
+        // act
+        mock.Object.StartAllThreads();
 
-            // act
-            mock.Object.StartAllThreads();
+        // assert
+        Assert.Equal(threads, mock.Object.Threads);
+        mock.VerifyAll();
+    }
 
-            // assert
-            Assert.Equal(threads, mock.Object.Threads);
-            mock.VerifyAll();
-        }
+    [Fact]
+    public void AbortAllThreadsTest_WorksFine()
+    {
+        // arrange
+        Action method = () => { Thread.Sleep(100); };
+        var thread1 = new Thread(() => method());
+        var thread2 = new Thread(() => method());
+        var threads = new List<Thread> {thread1, thread2};
 
-        [Fact]
-        public void AbortAllThreadsTest_WorksFine()
-        {
-            // arrange
-            Action method = () => { Thread.Sleep(100); };
-            var thread1 = new Thread(() => method());
-            var thread2 = new Thread(() => method());
-            var threads = new List<Thread> {thread1, thread2};
+        // expectations
+        var mock = new Mock<ThreadProvider>();
+        mock.SetupGet(x => x.Threads).Returns(threads);
 
-            // expectations
-            var mock = new Mock<ThreadProvider>();
-            mock.SetupGet(x => x.Threads).Returns(threads);
+        // act
+        mock.Object.AbortAllThreads();
 
-            // act
-            mock.Object.AbortAllThreads();
-
-            // assert
-            Assert.Equal(threads, mock.Object.Threads);
-            mock.VerifyAll();
-        }
+        // assert
+        Assert.Equal(threads, mock.Object.Threads);
+        mock.VerifyAll();
     }
 }

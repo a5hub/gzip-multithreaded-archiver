@@ -1,111 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
-using GZip.Logic.Operations;
-using GZip.Logic.TaskManagement;
-using GZip.Models;
+using GZip.Logic.Logic.Operations;
+using GZip.Logic.Logic.TaskManagement;
+using GZip.Logic.Models;
 using Moq;
 using Xunit;
 
-namespace GZip.Tests.TaskManagement
+namespace GZip.Tests.TaskManagement;
+
+public class TaskManagerTests
 {
-    public class TaskManagerTests
+    private readonly TaskManager target;
+    private readonly Mock<ITaskProcessLogic> taskProcessLogic = new Mock<ITaskProcessLogic>();
+    private readonly Mock<ITaskSynchronizationParamsFactory> taskSyncParamsFactory
+        = new Mock<ITaskSynchronizationParamsFactory>();
+    private readonly Mock<IGZipTaskFactory> gzipTaskFactory = new Mock<IGZipTaskFactory>();
+    private readonly Mock<ITaskQueue<GZipTask>> taskQueue = new Mock<ITaskQueue<GZipTask>>();
+
+    public TaskManagerTests()
     {
-        private readonly TaskManager target;
-        private readonly Mock<ITaskProcessLogic> taskProcessLogic = new Mock<ITaskProcessLogic>();
-        private readonly Mock<ITaskSynchronizationParamsFactory> taskSyncParamsFactory
-            = new Mock<ITaskSynchronizationParamsFactory>();
-        private readonly Mock<IGZipTaskFactory> gzipTaskFactory = new Mock<IGZipTaskFactory>();
-        private readonly Mock<ITaskQueue<GZipTask>> taskQueue = new Mock<ITaskQueue<GZipTask>>();
+        target = new TaskManager(taskProcessLogic.Object, taskSyncParamsFactory.Object,
+            gzipTaskFactory.Object, taskQueue.Object);
+    }
 
-        public TaskManagerTests()
+    [Fact]
+    public void CreateTasksTest_EmptyChunks()
+    {
+        // arrange
+        var inputFilePath = "path";
+        var filePaths = new FilePaths
         {
-            target = new TaskManager(taskProcessLogic.Object, taskSyncParamsFactory.Object,
-                gzipTaskFactory.Object, taskQueue.Object);
-        }
+            InputFilePath = inputFilePath
+        };
+        var operation = new Mock<IOperation>();
 
-        [Fact]
-        public void CreateTasksTest_EmptyChunks()
+        var fileChunks = new List<FileChunk>();
+
+        // expectations
+        operation.Setup(_ => _.SplitFile(inputFilePath)).Returns(fileChunks);
+
+        // act
+        target.CreateTasks(filePaths, operation.Object);
+
+        // assert
+        operation.VerifyAll();
+    }
+
+    [Fact]
+    public void CreateTasksTest_WorksFine()
+    {
+        // arrange
+        var inputFilePath = "path";
+        var filePaths = new FilePaths
         {
-            // arrange
-            var inputFilePath = "path";
-            var filePaths = new FilePaths
-            {
-                InputFilePath = inputFilePath
-            };
-            var operation = new Mock<IOperation>();
+            InputFilePath = inputFilePath
+        };
+        var operation = new Mock<IOperation>();
 
-            var fileChunks = new List<FileChunk>();
+        var chunk = new FileChunk {StartPosition = 0, ReadBytes = 10};
+        var fileChunks = new List<FileChunk> { chunk };
+        var taskNumber = 0;
 
-            // expectations
-            operation.Setup(_ => _.SplitFile(inputFilePath)).Returns(fileChunks);
-
-            // act
-            target.CreateTasks(filePaths, operation.Object);
-
-            // assert
-            operation.VerifyAll();
-        }
-
-        [Fact]
-        public void CreateTasksTest_WorksFine()
+        var syncParams = new TaskSynchronizationParams
         {
-            // arrange
-            var inputFilePath = "path";
-            var filePaths = new FilePaths
-            {
-                InputFilePath = inputFilePath
-            };
-            var operation = new Mock<IOperation>();
+            TaskNumber = taskNumber,
+            ResetEvent = target.ResetEvent,
+            CanProceedFunc = target.CanProceed
+        };
 
-            var chunk = new FileChunk {StartPosition = 0, ReadBytes = 10};
-            var fileChunks = new List<FileChunk> { chunk };
-            var taskNumber = 0;
+        var gZipTask = new GZipTask (filePaths,syncParams,chunk, operation.Object);
 
-            var syncParams = new TaskSynchronizationParams
-            {
-                TaskNumber = taskNumber,
-                ResetEvent = target.ResetEvent,
-                CanProceedFunc = target.CanProceed
-            };
+        // expectations
+        operation.Setup(_ => _.SplitFile(inputFilePath)).Returns(fileChunks);
+        taskSyncParamsFactory.Setup(_ => _.Create(taskNumber, target.ResetEvent, target.CanProceed)).Returns(syncParams);
+        gzipTaskFactory.Setup(_ => _.Create(filePaths, syncParams, chunk, operation.Object)).Returns(gZipTask);
+        taskQueue.Setup(_ => _.Enqueue(gZipTask));
 
-            var gZipTask = new GZipTask (filePaths,syncParams,chunk, operation.Object);
+        // act
+        target.CreateTasks(filePaths, operation.Object);
 
-            // expectations
-            operation.Setup(_ => _.SplitFile(inputFilePath)).Returns(fileChunks);
-            taskSyncParamsFactory.Setup(_ => _.Create(taskNumber, target.ResetEvent, target.CanProceed)).Returns(syncParams);
-            gzipTaskFactory.Setup(_ => _.Create(filePaths, syncParams, chunk, operation.Object)).Returns(gZipTask);
-            taskQueue.Setup(_ => _.Enqueue(gZipTask));
+        // assert
+        operation.VerifyAll();
+    }
 
-            // act
-            target.CreateTasks(filePaths, operation.Object);
+    [Fact]
+    public void ExecuteTest()
+    {
+        // arrange
+        Action<Exception> exceptionHandler = (ex) => { };
+        var filePath = new FilePaths();
+        var syncParams = new TaskSynchronizationParams();
+        var chunk = new FileChunk();
+        var operation = new Mock<IOperation>();
+        var gZipTask = new GZipTask(filePath, syncParams, chunk, operation.Object);
 
-            // assert
-            operation.VerifyAll();
-        }
+        // expectation
+        taskQueue.SetupSequence(_ => _.NotEmpty())
+            .Returns(true)
+            .Returns(false);
+        taskQueue.Setup(_ => _.TryDequeue(out gZipTask));
+        taskProcessLogic.Setup(_ => _.ProcessTask(gZipTask));
 
-        [Fact]
-        public void ExecuteTest()
-        {
-            // arrange
-            Action<Exception> exceptionHandler = (ex) => { };
-            var filePath = new FilePaths();
-            var syncParams = new TaskSynchronizationParams();
-            var chunk = new FileChunk();
-            var operation = new Mock<IOperation>();
-            var gZipTask = new GZipTask(filePath, syncParams, chunk, operation.Object);
+        // act
+        target.Execute(exceptionHandler);
 
-            // expectation
-            taskQueue.SetupSequence(_ => _.NotEmpty())
-                .Returns(true)
-                .Returns(false);
-            taskQueue.Setup(_ => _.TryDequeue(out gZipTask));
-            taskProcessLogic.Setup(_ => _.ProcessTask(gZipTask));
-
-            // act
-            target.Execute(exceptionHandler);
-
-            // assert
-            taskProcessLogic.VerifyAll();
-        }
+        // assert
+        taskProcessLogic.VerifyAll();
     }
 }
