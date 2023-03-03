@@ -1,9 +1,9 @@
-﻿using FileProcessor.Configuration;
+﻿using GZip.Configuration;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace FileProcessor.Test
+namespace GZip.Tests
 {
     public class AppConfigTests
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Parameters needed to organize thread task synchronization </summary>
     public class TaskSynchronizationParams

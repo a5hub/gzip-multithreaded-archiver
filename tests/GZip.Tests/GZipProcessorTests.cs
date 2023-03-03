@@ -1,14 +1,14 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Logic.TaskManagement;
-using FileProcessor.Logic.Threading;
-using FileProcessor.Models;
-using Moq;
-using System;
+﻿using System;
 using FluentAssertions;
+using GZip.Common;
+using GZip.Logic.Operations;
+using GZip.Logic.TaskManagement;
+using GZip.Logic.Threading;
+using GZip.Models;
+using Moq;
 using Xunit;
 
-namespace FileProcessor.Test
+namespace GZip.Tests
 {
     public class GZipProcessorTests
     {

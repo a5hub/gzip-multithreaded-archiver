@@ -1,13 +1,11 @@
-﻿using FileProcessor.Logic.Threading;
-using FluentAssertions;
-using FluentAssertions.Common;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using GZip.Logic.Threading;
+using Moq;
 using Xunit;
 
-namespace FileProcessor.Test.Threading
+namespace GZip.Tests.Threading
 {
     public class ThreadProviderTests
     {

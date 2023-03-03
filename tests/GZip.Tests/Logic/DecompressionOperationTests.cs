@@ -1,12 +1,12 @@
-﻿using FileProcessor.Configuration;
-using FileProcessor.Logic.Archivation;
-using FileProcessor.Logic.Operations;
-using Moq;
-using System.IO.Abstractions.TestingHelpers;
+﻿using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+using GZip.Configuration;
+using GZip.Logic.Archivation;
+using GZip.Logic.Operations;
+using Moq;
 using Xunit;
 
-namespace FileProcessor.Test.Logic
+namespace GZip.Tests.Logic
 {
     public class DecompressionOperationTests
     {

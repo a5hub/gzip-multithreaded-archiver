@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileProcessor.Logic.Threading
+namespace GZip.Logic.Threading
 {
     /// <summary> Interface for execution in new thread </summary>
     public interface IThreadExecutable

@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Models
+﻿namespace GZip.Models
 {
     /// <summary> Input and output file paths </summary>
     public class FilePaths

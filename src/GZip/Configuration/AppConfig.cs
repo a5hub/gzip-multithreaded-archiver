@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace FileProcessor.Configuration
+namespace GZip.Configuration
 {
     /// <summary> Application configuration </summary>
     public class AppConfig : IAppConfig

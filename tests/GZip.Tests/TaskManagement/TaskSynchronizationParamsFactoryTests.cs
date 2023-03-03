@@ -1,10 +1,10 @@
 ﻿using System;
-using FileProcessor.Logic.TaskManagement;
 using System.Threading;
-using Xunit;
 using FluentAssertions;
+using GZip.Logic.TaskManagement;
+using Xunit;
 
-namespace FileProcessor.Test.TaskManagement
+namespace GZip.Tests.TaskManagement
 {
     public class TaskSynchronizationParamsFactoryTests
     {

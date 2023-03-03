@@ -1,11 +1,10 @@
-﻿using FileProcessor.Configuration;
-using FileProcessor.Logic.Archivation;
-using System;
+﻿using System;
 using System.IO.Abstractions;
-using FileProcessor.Common;
-using GZip;
+using GZip.Common;
+using GZip.Configuration;
+using GZip.Logic.Archivation;
 
-namespace FileProcessor.Logic.Operations
+namespace GZip.Logic.Operations
 {
     /// <summary> Creates operation implementation dependent upon type </summary>
     public class OperationFactory : IOperationFactory

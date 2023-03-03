@@ -1,8 +1,8 @@
-﻿using FileProcessor.Common;
-using System.IO;
+﻿using System.IO;
 using System.IO.Abstractions;
+using GZip.Common;
 
-namespace FileProcessor.Logic.FileAccess
+namespace GZip.Logic.FileAccess
 {
     /// <summary> Manage access to physical files </summary>
     public class FileAccessor : IFileAccessor

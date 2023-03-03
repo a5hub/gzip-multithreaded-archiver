@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileProcessor.Common
+namespace GZip.Common
 {
     public abstract class EnvironmentControl
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace FileProcessor.Logic.Threading
+namespace GZip.Logic.Threading
 {
     /// <summary> Provides base thread functional </summary>
     public class ThreadProvider : IThreadProvider

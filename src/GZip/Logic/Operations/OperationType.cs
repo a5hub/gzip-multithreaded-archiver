@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Logic.Operations
+﻿namespace GZip.Logic.Operations
 {
     /// <summary> List of default program functional </summary>
     public enum OperationType

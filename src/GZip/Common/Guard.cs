@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace FileProcessor.Common
+namespace GZip.Common
 {
     [DebuggerStepThrough]
 	public static class Guard

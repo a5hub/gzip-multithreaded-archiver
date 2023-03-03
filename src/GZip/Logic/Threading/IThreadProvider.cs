@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileProcessor.Logic.Threading
+namespace GZip.Logic.Threading
 {
     /// <summary> Provides base thread functional </summary>
     public interface IThreadProvider

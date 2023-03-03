@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
-using FileProcessor.Common;
+using GZip.Common;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Creation of task synchronization params objects </summary>
     public class TaskSynchronizationParamsFactory : ITaskSynchronizationParamsFactory

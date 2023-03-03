@@ -1,8 +1,8 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Models;
+﻿using GZip.Common;
+using GZip.Logic.Operations;
+using GZip.Models;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> GZip task logic implementation </summary>
     public class GZipTask

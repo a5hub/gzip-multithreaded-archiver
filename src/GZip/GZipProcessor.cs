@@ -1,14 +1,13 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Logic.TaskManagement;
-using FileProcessor.Logic.Threading;
-using FileProcessor.Models;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using GZip;
+using GZip.Common;
+using GZip.Logic.Operations;
+using GZip.Logic.TaskManagement;
+using GZip.Logic.Threading;
+using GZip.Models;
+using Serilog;
 
-namespace FileProcessor
+namespace GZip
 {
     /// <summary> Logic for file compression/decompression </summary>
     public class GZipProcessor : IGZipProcessor

@@ -1,9 +1,8 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Configuration;
-using System;
-using System.Threading;
+﻿using System;
+using GZip.Common;
+using GZip.Configuration;
 
-namespace FileProcessor.Logic.Threading
+namespace GZip.Logic.Threading
 {
     /// <summary> Manages all threads in application </summary>
     public class ThreadManager : IThreadManager

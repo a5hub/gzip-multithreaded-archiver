@@ -1,11 +1,11 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Configuration;
-using FileProcessor.Logic.Archivation;
-using FileProcessor.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO.Abstractions;
+using GZip.Common;
+using GZip.Configuration;
+using GZip.Logic.Archivation;
+using GZip.Models;
 
-namespace FileProcessor.Logic.Operations
+namespace GZip.Logic.Operations
 {
     /// <summary> Implements compression logic methods </summary>
     public class CompressionOperation : IOperation

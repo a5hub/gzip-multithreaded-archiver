@@ -1,18 +1,18 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Configuration;
-using FileProcessor.Logic.Archivation;
-using FileProcessor.Logic.FileAccess;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Logic.TaskManagement;
-using FileProcessor.Logic.Threading;
+﻿using System;
+using System.IO;
+using System.IO.Abstractions;
+using GZip.Common;
+using GZip.Configuration;
+using GZip.Logic.Archivation;
+using GZip.Logic.FileAccess;
+using GZip.Logic.Operations;
+using GZip.Logic.TaskManagement;
+using GZip.Logic.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System;
-using System.IO;
-using System.IO.Abstractions;
 
-namespace FileProcessor
+namespace GZip
 {
     class Program
     {

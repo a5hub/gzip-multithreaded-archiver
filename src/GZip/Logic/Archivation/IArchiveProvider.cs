@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Logic.Archivation
+﻿namespace GZip.Logic.Archivation
 {
     /// <summary> Logic provides methods to compress and decompress data </summary>
     public interface IArchiveProvider

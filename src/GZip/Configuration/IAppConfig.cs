@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Configuration
+﻿namespace GZip.Configuration
 {
     /// <summary> Application configuration </summary>
     public interface IAppConfig

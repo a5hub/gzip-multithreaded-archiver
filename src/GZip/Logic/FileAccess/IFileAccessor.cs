@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Logic.FileAccess
+﻿namespace GZip.Logic.FileAccess
 {
     /// <summary> Manage access to physical files </summary>
     public interface IFileAccessor

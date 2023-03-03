@@ -1,8 +1,8 @@
-﻿using FileProcessor.Logic.Archivation;
-using System.Text;
+﻿using System.Text;
+using GZip.Logic.Archivation;
 using Xunit;
 
-namespace FileProcessor.Test.Logic
+namespace GZip.Tests.Logic
 {
     public class ArchiveProviderTests
     {

@@ -1,13 +1,13 @@
-﻿using FileProcessor.Logic.FileAccess;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Logic.TaskManagement;
-using FileProcessor.Models;
-using Moq;
-using System;
+﻿using System;
 using System.Threading;
+using GZip.Logic.FileAccess;
+using GZip.Logic.Operations;
+using GZip.Logic.TaskManagement;
+using GZip.Models;
+using Moq;
 using Xunit;
 
-namespace FileProcessor.Test.TaskManagement
+namespace GZip.Tests.TaskManagement
 {
     public class TaskProcessLogicTests
     {

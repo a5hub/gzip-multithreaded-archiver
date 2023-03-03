@@ -1,12 +1,12 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Logic.Operations;
-using FileProcessor.Models;
-using Serilog;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
+using GZip.Common;
+using GZip.Logic.Operations;
+using GZip.Models;
+using Serilog;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Tasks creating and executing logic </summary>
     public class TaskManager : ITaskManager

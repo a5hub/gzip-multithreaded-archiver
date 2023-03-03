@@ -1,7 +1,7 @@
-﻿using FileProcessor.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GZip.Models;
 
-namespace FileProcessor.Logic.Operations
+namespace GZip.Logic.Operations
 {
     /// <summary> Operation specific logic </summary>
     public interface IOperation

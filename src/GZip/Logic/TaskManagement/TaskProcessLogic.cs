@@ -1,8 +1,8 @@
-﻿using FileProcessor.Common;
-using FileProcessor.Logic.FileAccess;
+﻿using GZip.Common;
+using GZip.Logic.FileAccess;
 using Serilog;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Generic task process logic for both compression and decompression parts </summary>
     public class TaskProcessLogic : ITaskProcessLogic

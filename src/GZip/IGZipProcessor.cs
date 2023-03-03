@@ -1,7 +1,7 @@
-﻿using FileProcessor.Logic.Operations;
-using FileProcessor.Models;
+﻿using GZip.Logic.Operations;
+using GZip.Models;
 
-namespace FileProcessor
+namespace GZip
 {
     /// <summary> Logic for file compression/decompression </summary>
     public  interface IGZipProcessor

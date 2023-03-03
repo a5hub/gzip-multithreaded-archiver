@@ -1,8 +1,8 @@
-﻿using FileProcessor.Logic.Operations;
-using FileProcessor.Logic.Threading;
-using FileProcessor.Models;
+﻿using GZip.Logic.Operations;
+using GZip.Logic.Threading;
+using GZip.Models;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Tasks creating and executing logic </summary>
     public interface ITaskManager : IThreadExecutable

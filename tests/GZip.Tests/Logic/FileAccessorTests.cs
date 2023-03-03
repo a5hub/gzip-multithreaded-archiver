@@ -1,9 +1,9 @@
-﻿using FileProcessor.Logic.FileAccess;
-using System.IO.Abstractions.TestingHelpers;
+﻿using System.IO.Abstractions.TestingHelpers;
 using System.Text;
+using GZip.Logic.FileAccess;
 using Xunit;
 
-namespace FileProcessor.Test.Logic
+namespace GZip.Tests.Logic
 {
     public class FileAccessorTests
     {

@@ -1,11 +1,11 @@
-﻿using FileProcessor.Configuration;
-using FileProcessor.Logic.Threading;
+﻿using System;
 using FluentAssertions;
+using GZip.Configuration;
+using GZip.Logic.Threading;
 using Moq;
-using System;
 using Xunit;
 
-namespace FileProcessor.Test.Threading
+namespace GZip.Tests.Threading
 {
     public class ThreadManagerTests
     {

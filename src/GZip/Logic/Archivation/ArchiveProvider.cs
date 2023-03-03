@@ -1,8 +1,8 @@
-﻿using FileProcessor.Common;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
+using GZip.Common;
 
-namespace FileProcessor.Logic.Archivation
+namespace GZip.Logic.Archivation
 {
     /// <summary> Logic provides methods to compress and decompress data </summary>
     public class ArchiveProvider : IArchiveProvider

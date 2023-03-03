@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Models
+﻿namespace GZip.Models
 {
     /// <summary> Contains parameters needed during compression logic </summary>
     public class FileChunk

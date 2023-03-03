@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Logic.TaskManagement
+﻿namespace GZip.Logic.TaskManagement
 {
     /// <summary> Generic task process logic for both compression and decompression parts </summary>
     public interface ITaskProcessLogic

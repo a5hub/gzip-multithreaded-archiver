@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace FileProcessor.Logic.TaskManagement
+namespace GZip.Logic.TaskManagement
 {
     /// <summary> Working queue for tasks to be processed </summary>
     public class TaskQueue : ITaskQueue<GZipTask>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileProcessor.Logic.Threading
+namespace GZip.Logic.Threading
 {
     /// <summary> Manages all threads in application </summary>
     public interface IThreadManager

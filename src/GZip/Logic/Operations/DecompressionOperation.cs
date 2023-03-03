@@ -1,13 +1,13 @@
-﻿using FileProcessor.Configuration;
-using FileProcessor.Logic.Archivation;
-using FileProcessor.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using FileProcessor.Common;
+using GZip.Common;
+using GZip.Configuration;
+using GZip.Logic.Archivation;
+using GZip.Models;
 
-namespace FileProcessor.Logic.Operations
+namespace GZip.Logic.Operations
 {
     /// <summary> Implements compression logic methods </summary>
     public class DecompressionOperation : IOperation

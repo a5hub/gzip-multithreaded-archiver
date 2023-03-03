@@ -1,4 +1,4 @@
-﻿namespace FileProcessor.Logic.Operations
+﻿namespace GZip.Logic.Operations
 {
     /// <summary> Creates operation implementation dependent upon type </summary>
     public interface IOperationFactory
